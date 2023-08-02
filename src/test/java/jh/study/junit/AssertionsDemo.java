@@ -2,8 +2,9 @@ package jh.study.junit;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import java.time.Duration;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class AssertionsDemo {
     private final Calculator calculator = new Calculator();
@@ -14,17 +15,77 @@ public class AssertionsDemo {
     void standardAssertions() {
         assertEquals(2, calculator.add(1, 1));
         assertEquals(4, calculator.multiply(2, 2), "The optional failure message is now the last parameter");
-        assertTrue('a' > 'b', () -> "Assertion messages can be lazily evaluated -- "
+        assertTrue('a' < 'b', () -> "Assertion messages can be lazily evaluated -- "
                 + "to avoid constructing complex messages unnecessarily.");
     }
 
-//    @Test
-//    void groupedAssertions() {
-//        // In a grouped assertion all assertions are executed, and all
-//        // failures will be reported together.
-//        assertAll("person",
-//                () -> assertEquals("Jane", person.getFirstName()),
-//                () -> assertEquals("Doe", person.getLastName())
-//        );
-//    }
+    @Test
+    void groupedAssertions() {
+        assertAll("person",
+                () -> assertEquals("Jane", person.getFirstName()),
+                () -> assertEquals("Doe", person.getLastName())
+        );
+    }
+
+
+    @Test
+    void dependentAssertions() {
+        // Within a code block, if an assertion fails the
+        // subsequent code in the same block will be skipped.
+        assertAll("properties",
+                () -> {
+                    String firstName = person.getFirstName();
+                    assertNotNull(firstName);
+                    assertEquals("Jane", firstName);
+
+                    // Executed only if the previous assertion is valid.
+                    assertAll("first name",
+                            () -> assertTrue(firstName.startsWith("J")),
+                            () -> assertTrue(firstName.endsWith("e"))
+                    );
+                },
+                () -> {
+                    // Grouped assertion, so processed independently
+                    // of results of first name assertions.
+                    String lastName = person.getLastName();
+                    assertNotNull(lastName);
+
+                    // Executed only if the previous assertion is valid.
+                    assertAll("last name",
+                            () -> assertTrue(lastName.startsWith("D")),
+                            () -> assertTrue(lastName.endsWith("e"))
+                    );
+                }
+        );
+    }
+
+    @Test
+    void exceptionTesting() {
+        Exception exception = assertThrows(ArithmeticException.class, () ->
+                calculator.divide(1, 0));
+        assertEquals("/ by zero", exception.getMessage());
+    }
+
+
+    @Test
+    void timeoutNotExceeded() {
+        // The following assertion succeeds.
+        assertTimeout(Duration.ofSeconds(2), () -> {
+            // Perform task that takes less than 2 minutes.
+            Thread.sleep(1000);
+        });
+    }
+
+
+    @Test
+    void timeoutNotExceededWithResult() {
+        // The following assertion succeeds, and returns the supplied object.
+        String actualResult = assertTimeout(Duration.ofSeconds(2), () -> {
+            Thread.sleep(3000);
+            return "a result";
+        });
+
+        assertEquals("a result", actualResult);
+    }
+
 }
