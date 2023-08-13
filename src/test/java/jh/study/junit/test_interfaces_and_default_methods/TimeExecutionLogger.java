@@ -1,4 +1,4 @@
-package jh.study.junit.testInterfacesAndDefaultMethods;
+package jh.study.junit.test_interfaces_and_default_methods;
 
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.extension.ExtendWith;

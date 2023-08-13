@@ -1,4 +1,4 @@
-package jh.study.junit.testInterfacesAndDefaultMethods;
+package jh.study.junit.test_interfaces_and_default_methods;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.TestInstance.Lifecycle;

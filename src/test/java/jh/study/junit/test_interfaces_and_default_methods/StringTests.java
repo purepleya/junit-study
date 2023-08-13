@@ -1,4 +1,4 @@
-package jh.study.junit.testInterfacesAndDefaultMethods;
+package jh.study.junit.test_interfaces_and_default_methods;
 
 public class StringTests implements ComparableContract<String>, EqualsContract<String>  {
 
