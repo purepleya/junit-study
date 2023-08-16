@@ -20,40 +20,4 @@ public class BasicParameterizedTestDemo {
         assertTrue(argument > 0 && argument < 4);
     }
 
-    @ParameterizedTest
-    @NullAndEmptySource
-    @ValueSource(strings = { " ", "   ", "\t", "\n" })
-    void nullEmptyAndBlankStrings(String text) {
-        assertTrue(text == null || text.trim().isEmpty());
-    }
-
-    @ParameterizedTest
-    @EnumSource(ChronoUnit.class)
-    void testWithEnumSource(TemporalUnit unit) {
-        assertNotNull(unit);
-    }
-
-    @ParameterizedTest
-    @EnumSource
-    void testWithEnumSourceWithAutoDetection(ChronoUnit unit) {
-        assertNotNull(unit);
-    }
-
-    @ParameterizedTest
-    @EnumSource(names = { "DAYS", "HOURS" })
-    void testWithEnumSourceInclude(ChronoUnit unit) {
-        assertTrue(EnumSet.of(ChronoUnit.DAYS, ChronoUnit.HOURS).contains(unit));
-    }
-
-    @ParameterizedTest
-    @EnumSource(mode = EXCLUDE, names = { "ERAS", "FOREVER" })
-    void testWithEnumSourceExclude(ChronoUnit unit) {
-        assertFalse(EnumSet.of(ChronoUnit.ERAS, ChronoUnit.FOREVER).contains(unit));
-    }
-
-    @ParameterizedTest
-    @EnumSource(mode = MATCH_ALL, names = "^.*DAYS$")
-    void testWithEnumSourceRegex(ChronoUnit unit) {
-        assertTrue(unit.name().endsWith("DAYS"));
-    }
 }
