@@ -19,4 +19,23 @@ public class CsvSourceDemo {
         assertNotNull(fruit);
         assertNotEquals(0, rank);
     }
+
+    @ParameterizedTest
+    @CsvSource(delimiter = '|', quoteCharacter = '"', textBlock = """
+    #-----------------------------
+    #    FRUIT     |     RANK
+    #-----------------------------
+         apple     |      1
+    #-----------------------------
+         banana    |      2
+    #-----------------------------
+      "lemon lime" |     0xF1
+    #-----------------------------
+       strawberry  |    700_000
+    #-----------------------------
+    """)
+    void testWithCsvSourceWithTextBlock(String fruit, int rank) {
+        assertNotNull(fruit);
+        assertNotEquals(0, rank);
+    }
 }
