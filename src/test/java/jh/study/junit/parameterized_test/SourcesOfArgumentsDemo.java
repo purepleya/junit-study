@@ -108,4 +108,19 @@ public class SourcesOfArgumentsDemo {
     void testWithExternalMethodSource(String tinyString) {
         assertTrue(tinyString.length() < 4);
     }
+
+
+    @ParameterizedTest
+    @ArgumentsSource(MyArgumentsProvider.class)
+    void testWithArgumentsSource(String argument) {
+        assertNotNull(argument);
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = "42 Cats")
+    void testWithImplicitFallbackArgumentConversion(Book book) {
+        assertEquals("42 Cats", book.getTitle());
+    }
+
+
 }
